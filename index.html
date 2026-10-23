@@ -66,10 +66,53 @@
     .hidden { display:none!important; }
     .toast { position:fixed; left:50%; bottom:calc(18px + env(safe-area-inset-bottom)); transform:translateX(-50%); background:#282d38; border:1px solid #505969; border-radius:10px; padding:10px 14px; font-size:12px; box-shadow:0 10px 35px #0009; z-index:10; max-width:90vw; text-align:center; }
     @media (min-width:600px) { .app{padding-left:22px;padding-right:22px}.hero{height:350px}.story{padding:20px}.choices{grid-template-columns:1fr 1fr}.choice:last-child:nth-child(odd){grid-column:1/-1} }
+
+    .intro-screen { position:fixed; inset:0; z-index:50; display:flex; align-items:flex-end; justify-content:center; padding:24px 18px calc(24px + env(safe-area-inset-bottom)); background:#050609; overflow:auto; }
+    .intro-screen::before { content:""; position:fixed; inset:0; background:linear-gradient(180deg,rgba(3,4,7,.1) 0%,rgba(3,4,7,.28) 27%,rgba(3,4,7,.9) 57%,#050609 100%),radial-gradient(ellipse at 50% 24%,rgba(178,184,191,.2),transparent 24%),linear-gradient(90deg,#080a10 0%,#29272d 48%,#080a10 100%); }
+    .intro-hospital { position:fixed; inset:0; pointer-events:none; opacity:.8; }
+    .intro-hospital::before { content:""; position:absolute; left:22%; right:22%; top:0; height:57%; background:linear-gradient(180deg,#30303a,#0b0d13); clip-path:polygon(25% 0,75% 0,100% 100%,0 100%); border-left:1px solid #42414b; border-right:1px solid #42414b; }
+    .intro-hospital::after { content:""; position:absolute; left:49%; top:0; height:48%; width:2px; background:#d0d2d6; opacity:.3; box-shadow:0 0 35px 15px rgba(196,201,207,.15); }
+    .intro-card { position:relative; width:min(100%,610px); border:1px solid #48404a; border-radius:20px; padding:22px 20px 18px; background:linear-gradient(180deg,rgba(17,18,25,.94),rgba(7,8,12,.98)); box-shadow:0 24px 90px #000b; }
+    .intro-kicker { color:#d77b82; font-size:10px; font-weight:900; letter-spacing:.24em; }
+    .intro-title { margin:9px 0 4px; font-size:clamp(32px,9vw,54px); line-height:.98; letter-spacing:.05em; text-shadow:0 3px 22px #000; }
+    .intro-subtitle { color:#b7bbc3; font-size:12px; letter-spacing:.12em; margin:10px 0 18px; }
+    .intro-rule { height:1px; background:linear-gradient(90deg,#a43f49,transparent); margin:15px 0; }
+    .intro-copy { color:#d5d7dc; font-size:14px; line-height:1.82; }
+    .intro-copy p { margin:0 0 12px; }
+    .intro-warning { color:#d98c91; font-size:11px; letter-spacing:.04em; border-left:2px solid #8c3039; padding:3px 0 3px 10px; margin:14px 0 18px; }
+    .intro-start { width:100%; border:1px solid #b94a54; border-radius:13px; background:linear-gradient(110deg,#8b2934,#4c1b22); color:#fff; padding:15px; font-weight:900; letter-spacing:.08em; box-shadow:0 8px 25px #0008; }
+    .intro-foot { color:#747b86; font-size:10px; text-align:center; margin-top:11px; }
+    body.intro-active { overflow:hidden; }
+    @media (min-width:600px) { .intro-screen {align-items:center}.intro-card{padding:28px 30px 24px}.intro-copy{font-size:15px} }
+
     @media (prefers-reduced-motion:reduce) { * {transition:none!important;scroll-behavior:auto!important} }
   </style>
 </head>
-<body>
+<body class="intro-active">
+
+<div class="intro-screen" id="introScreen">
+  <div class="intro-hospital" aria-hidden="true"></div>
+  <section class="intro-card" aria-labelledby="introTitle">
+    <div class="intro-kicker">A PSYCHOLOGICAL HORROR STORY</div>
+    <h1 class="intro-title" id="introTitle">午夜禁區<br>食人醫生</h1>
+    <div class="intro-subtitle">有些醫院治療病人。有些醫院不會讓病人離開。</div>
+    <div class="intro-rule"></div>
+    <div class="intro-copy">
+      <p><strong>【事件檔案：聖安瑟姆醫院，封存第 17 號】</strong></p>
+      <p>十一年前，一場暴雨沖毀了山路。聖安瑟姆醫院對外宣稱，地下手術區因電力故障而永久停用。那一夜之後，三十七名病人從名冊上消失，值夜的護士全部辭職，唯一留下來的主治醫生——陳醫生——卻獲頒了醫療貢獻獎。</p>
+      <p>警方曾經調查。每一份病歷都完整，每一段監視器畫面都顯示病房空無一人。只有一段錄音沒有被清除：凌晨三點十七分，廣播裡有個女人反覆說——<em>「請不要替我簽出院同意書。他還在房裡。」</em></p>
+      <p>三個月前，你的妹妹在這間醫院失蹤。醫院說她從未入院；但昨晚，你收到一封沒有寄件人的信，裡面只有她的病人腕帶，以及一張寫著今晚日期的手術通知。</p>
+      <p>你循著地址走進醫院。大門在你身後自動鎖上。前台的電腦亮起，螢幕上顯示你的姓名、出生日期，還有一行你從未告訴過任何人的字：</p>
+      <p><strong>「第 38 位病人已到。請通知陳醫生——家屬也可以入庫。」</strong></p>
+      <p>你醒來時躺在病床上，手腕有新鮮的針孔。走廊傳來金屬器械拖地的聲音。廣播響起一個溫柔、熟悉，彷彿早已等你很久的男聲：</p>
+      <p><em>「歡迎回來。你妹妹一直在等你。」</em></p>
+    </div>
+    <div class="intro-warning">心理恐怖題材：追捕、失蹤、醫療恐懼及令人不安的情節。</div>
+    <button class="intro-start" id="startGameBtn">進入醫院　／　開始故事</button>
+    <div class="intro-foot">建議戴上耳機、在安靜環境遊玩。你可以隨時重新開始。</div>
+  </section>
+</div>
+
 <div class="app">
   <header>
     <div><div class="brand">MIDNIGHT QUARANTINE</div><div class="chapter">午夜禁區 · 互動恐怖故事</div></div>

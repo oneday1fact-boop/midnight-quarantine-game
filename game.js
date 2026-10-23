@@ -12,9 +12,9 @@
     wake:{
       tag:"CHAPTER 01 · THE WARD", title:"最後一個病人", speaker:"未知來電 · 23:47",
       text:[
-        "你喺一張冰冷嘅病床上醒來。頭頂嘅燈管一閃一閃，手腕留住一道新鮮嘅針孔。",
-        "走廊傳來金屬器械拖過地面嘅聲音。廣播突然響起一個平靜得不自然嘅男聲：",
-        "「今晚最後一位病人，請留喺原地。醫生好快會過嚟。」"
+        "你喺一張冰冷嘅病床上醒來。手腕有三個新鮮針孔，嘴裡充滿消毒水和鐵鏽混合的味道。床尾的病歷寫著你的姓名，入院時間卻是十一年前。",
+        "走廊傳來金屬器械拖地的聲音。一下、一下，停在門外。門底慢慢滑進一張濕透的照片——是你失蹤的妹妹。她的臉被人用黑筆塗掉，背面寫著：『不要相信穿白袍的人，即使他用你的聲音叫你。』",
+        "廣播突然響起一個溫柔得不自然的男聲：「歡迎回來。你妹妹一直在等你。」門把開始緩緩轉動。"
       ],
       choices:[
         {title:"查看床邊的抽屜",desc:"可能找到有用物品，但抽屜會發出聲音。",to:"drawer",effect:{noise:10,alert:5}},
@@ -480,6 +480,12 @@
     }
     render();
   }
+  const introScreen = $("introScreen");
+  $("startGameBtn").addEventListener("click",()=>{
+    introScreen.classList.add("hidden");
+    document.body.classList.remove("intro-active");
+    showToast("門已鎖上。你只能向前走。");
+  });
   $("saveBtn").addEventListener("click",()=>save(false));
   $("resetBtn").addEventListener("click",reset);
   $("restartBtn").addEventListener("click",()=>{state=initial();enterScene("wake");showToast("新故事開始");});
