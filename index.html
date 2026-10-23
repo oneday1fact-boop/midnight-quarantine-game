@@ -67,12 +67,12 @@
     .toast { position:fixed; left:50%; bottom:calc(18px + env(safe-area-inset-bottom)); transform:translateX(-50%); background:#282d38; border:1px solid #505969; border-radius:10px; padding:10px 14px; font-size:12px; box-shadow:0 10px 35px #0009; z-index:10; max-width:90vw; text-align:center; }
     @media (min-width:600px) { .app{padding-left:22px;padding-right:22px}.hero{height:350px}.story{padding:20px}.choices{grid-template-columns:1fr 1fr}.choice:last-child:nth-child(odd){grid-column:1/-1} }
 
-    .intro-screen { position:fixed; inset:0; z-index:50; display:flex; align-items:flex-end; justify-content:center; padding:24px 18px calc(24px + env(safe-area-inset-bottom)); background:#050609; overflow:auto; }
-    .intro-screen::before { content:""; position:fixed; inset:0; background:linear-gradient(180deg,rgba(3,4,7,.1) 0%,rgba(3,4,7,.28) 27%,rgba(3,4,7,.9) 57%,#050609 100%),radial-gradient(ellipse at 50% 24%,rgba(178,184,191,.2),transparent 24%),linear-gradient(90deg,#080a10 0%,#29272d 48%,#080a10 100%); }
-    .intro-hospital { position:fixed; inset:0; pointer-events:none; opacity:.8; }
+    .intro-screen { position:fixed; inset:0; z-index:50; display:flex; align-items:flex-end; justify-content:center; padding:24px 18px calc(24px + env(safe-area-inset-bottom)); background:#050609 url("./assets/start-hospital.jpg") center 40% / cover no-repeat; overflow:auto; }
+    .intro-screen::before { content:""; position:fixed; inset:0; background:linear-gradient(180deg,rgba(3,4,7,.25) 0%,rgba(3,4,7,.38) 25%,rgba(3,4,7,.88) 62%,#050609 100%),linear-gradient(90deg,rgba(0,0,0,.45),transparent 55%,rgba(0,0,0,.38)); }
+    .intro-hospital { display:none; }
     .intro-hospital::before { content:""; position:absolute; left:22%; right:22%; top:0; height:57%; background:linear-gradient(180deg,#30303a,#0b0d13); clip-path:polygon(25% 0,75% 0,100% 100%,0 100%); border-left:1px solid #42414b; border-right:1px solid #42414b; }
     .intro-hospital::after { content:""; position:absolute; left:49%; top:0; height:48%; width:2px; background:#d0d2d6; opacity:.3; box-shadow:0 0 35px 15px rgba(196,201,207,.15); }
-    .intro-card { position:relative; width:min(100%,610px); border:1px solid #48404a; border-radius:20px; padding:22px 20px 18px; background:linear-gradient(180deg,rgba(17,18,25,.94),rgba(7,8,12,.98)); box-shadow:0 24px 90px #000b; }
+    .intro-card { position:relative; width:min(100%,610px); margin:0 auto; border:1px solid #51454a; border-radius:20px; padding:22px 20px 18px; background:linear-gradient(180deg,rgba(8,9,13,.84),rgba(5,6,9,.96)); box-shadow:0 24px 90px #000b; backdrop-filter:blur(4px); }
     .intro-kicker { color:#d77b82; font-size:10px; font-weight:900; letter-spacing:.24em; }
     .intro-title { margin:9px 0 4px; font-size:clamp(32px,9vw,54px); line-height:.98; letter-spacing:.05em; text-shadow:0 3px 22px #000; }
     .intro-subtitle { color:#b7bbc3; font-size:12px; letter-spacing:.12em; margin:10px 0 18px; }
@@ -84,6 +84,31 @@
     .intro-foot { color:#747b86; font-size:10px; text-align:center; margin-top:11px; }
     body.intro-active { overflow:hidden; }
     @media (min-width:600px) { .intro-screen {align-items:center}.intro-card{padding:28px 30px 24px}.intro-copy{font-size:15px} }
+
+    .image-event { position:fixed; inset:0; z-index:80; display:flex; align-items:center; justify-content:center; padding:18px; background:rgba(0,0,0,.82); backdrop-filter:blur(5px); animation:eventFade .22s ease-out; }
+    .image-event.hidden { display:none!important; }
+    .event-card { width:min(100%,480px); border:1px solid #7d3a43; border-radius:16px; overflow:hidden; background:#0a0c11; box-shadow:0 20px 80px #000; }
+    .event-image { display:block; width:100%; max-height:48dvh; object-fit:cover; background:#050609; }
+    .event-copy { padding:15px 16px 16px; }
+    .event-label { color:#ef8c95; font-size:10px; font-weight:900; letter-spacing:.2em; }
+    .event-title { margin:5px 0 7px; font-size:21px; }
+    .event-description { margin:0; color:#d1d5dc; font-size:14px; line-height:1.65; }
+    .event-close { margin-top:14px; width:100%; padding:12px; border:1px solid #77313a; border-radius:10px; color:white; background:#421c23; font-weight:800; }
+    @keyframes eventFade { from{opacity:0} to{opacity:1} }
+    @media (max-width:600px) { .intro-screen{justify-content:flex-end;padding:20px 13px calc(18px + env(safe-area-inset-bottom));background-position:52% center}.intro-card{padding:18px 16px 15px}.intro-copy{font-size:12px;line-height:1.6}.intro-copy p{margin-bottom:8px}.intro-subtitle{margin-bottom:10px}.intro-rule{margin:10px 0}.intro-warning{margin:9px 0 12px} }
+
+    .horror-flash{position:fixed;inset:0;z-index:100;pointer-events:none;opacity:0;background:rgba(180,0,18,.72);mix-blend-mode:screen}
+    .horror-flash.fire{animation:redFlash .42s steps(2,end) 1}
+    @keyframes redFlash{0%{opacity:0}18%{opacity:.9}38%{opacity:.18}56%{opacity:.72}100%{opacity:0}}
+    .cctv-noise{position:fixed;inset:0;z-index:95;pointer-events:none;opacity:0;background:repeating-linear-gradient(0deg,transparent 0 3px,rgba(210,230,255,.18) 4px,transparent 5px 8px),repeating-linear-gradient(90deg,rgba(255,0,25,.08) 0 2px,transparent 3px 7px);mix-blend-mode:screen}
+    .cctv-noise.fire{animation:signalGlitch .85s steps(2,end) 1}
+    @keyframes signalGlitch{0%{opacity:0;transform:translateX(0)}12%{opacity:.95;transform:translateX(-7px)}24%{opacity:.35;transform:translateX(5px)}39%{opacity:.85;transform:translateX(-3px)}55%{opacity:.18;transform:translateX(8px)}70%{opacity:.72;transform:translateX(-2px)}100%{opacity:0;transform:translateX(0)}}
+    .jump-scare{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.92);opacity:0;pointer-events:none}
+    .jump-scare.fire{animation:photoPop 1.45s steps(1,end) 1}
+    .jump-scare img{width:min(92vw,620px);max-height:82dvh;object-fit:contain;border:1px solid #7e323a;box-shadow:0 0 45px #9e101b;filter:contrast(1.18) saturate(.72)}
+    .jump-caption{position:absolute;bottom:8%;color:#ff454f;font-weight:900;letter-spacing:.2em;text-shadow:0 0 12px #f00;font-size:clamp(16px,4vw,25px)}
+    @keyframes photoPop{0%{opacity:0}4%{opacity:1}10%{opacity:.12}15%{opacity:1}23%{opacity:.85}30%{opacity:0}42%{opacity:1}54%{opacity:0}66%{opacity:1}100%{opacity:0}}
+    @media(prefers-reduced-motion:reduce){.horror-flash.fire,.cctv-noise.fire,.jump-scare.fire{animation-duration:.01ms}}
 
     @media (prefers-reduced-motion:reduce) { * {transition:none!important;scroll-behavior:auto!important} }
   </style>
@@ -149,6 +174,12 @@
   </main>
   <footer class="bottom"><span>單人恐怖冒險 · 進度自動儲存</span><div><button id="saveBtn">儲存</button><button id="resetBtn">重置進度</button></div></footer>
 </div>
+<div id="imageEvent" class="image-event hidden" role="dialog" aria-modal="true" aria-labelledby="eventTitle">
+  <section class="event-card"><img class="event-image" id="eventImage" src="" alt="故事中發現的可疑影像"><div class="event-copy"><div class="event-label" id="eventLabel">EVIDENCE FOUND</div><h2 class="event-title" id="eventTitle">發現線索</h2><p class="event-description" id="eventDescription"></p><button class="event-close" id="eventClose">收起影像，繼續探索</button></div></section>
+</div>
+<div id="horrorFlash" class="horror-flash" aria-hidden="true"></div>
+<div id="cctvNoise" class="cctv-noise" aria-hidden="true"></div>
+<div id="jumpScare" class="jump-scare" aria-hidden="true"><img src="./assets/doctor-photo.jpg" alt=""><div class="jump-caption">他一直在你身後</div></div>
 <div id="toast" class="toast hidden" role="status"></div>
 <script src="./game.js"></script>
 </body>

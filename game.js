@@ -391,6 +391,25 @@
 
   function addItem(s,item){ if(!s.inventory.includes(item)) s.inventory.push(item); }
   function hasItem(item){ return state.inventory.includes(item); }
+  let scareTimers = [];
+  let audioCtx = null;
+  function soundEffect(kind){
+    if(!state.sound) return;
+    try {
+      const AC=window.AudioContext||window.webkitAudioContext;
+      if(!AC) return;
+      if(!audioCtx) audioCtx=new AC();
+      if(audioCtx.state==="suspended") audioCtx.resume();
+      const now=audioCtx.currentTime, osc=audioCtx.createOscillator(), gain=audioCtx.createGain();
+      osc.connect(gain); gain.connect(audioCtx.destination);
+      if(kind==="heartbeat"){osc.type="sine";osc.frequency.setValueAtTime(58,now);osc.frequency.exponentialRampToValueAtTime(38,now+.18);gain.gain.setValueAtTime(.0001,now);gain.gain.exponentialRampToValueAtTime(.18,now+.025);gain.gain.exponentialRampToValueAtTime(.0001,now+.24);osc.start(now);osc.stop(now+.25);}
+      else if(kind==="sting"){osc.type="sawtooth";osc.frequency.setValueAtTime(240,now);osc.frequency.exponentialRampToValueAtTime(52,now+.42);gain.gain.setValueAtTime(.0001,now);gain.gain.exponentialRampToValueAtTime(.16,now+.025);gain.gain.exponentialRampToValueAtTime(.0001,now+.48);osc.start(now);osc.stop(now+.5);}
+      else {osc.type="square";osc.frequency.setValueAtTime(110,now);osc.frequency.setValueAtTime(72,now+.08);gain.gain.setValueAtTime(.0001,now);gain.gain.exponentialRampToValueAtTime(.07,now+.01);gain.gain.exponentialRampToValueAtTime(.0001,now+.16);osc.start(now);osc.stop(now+.18);}
+    } catch(e) {}
+  }
+  function pulse(id,duration=900){const el=$(id);if(!el)return;el.classList.remove("fire");void el.offsetWidth;el.classList.add("fire");scareTimers.push(setTimeout(()=>el.classList.remove("fire"),duration));}
+  function triggerCCTV(){pulse("cctvNoise",900);pulse("horrorFlash",500);soundEffect("static");}
+  function triggerPhotoJump(){const el=$("jumpScare");el.classList.remove("fire");void el.offsetWidth;el.classList.add("fire");triggerCCTV();soundEffect("sting");scareTimers.push(setTimeout(()=>el.classList.remove("fire"),1500));}
   function showToast(message){
     $("toast").textContent=message; $("toast").classList.remove("hidden");
     clearTimeout(toastTimer); toastTimer=setTimeout(()=>$("toast").classList.add("hidden"),2200);
@@ -405,6 +424,34 @@
       if(raw){ const parsed=JSON.parse(raw); if(parsed && parsed.node && scenes[parsed.node]) state={...initial(),...parsed}; }
     }catch(e){ state=initial(); }
   }
+  const visualEvents = {
+    drawer:{image:"./assets/clue-tools.jpg",label:"FOUND EVIDENCE",title:"手術器械上的痕跡",description:"金屬盤上有未乾透的暗色痕跡。最奇怪的是，每件器械都被整齊地排好，像是有人剛剛完成一場手術。"},
+    nurse:{image:"./assets/clue-sister.jpg",label:"RECOVERED IMAGE",title:"妹妹最後傳來的照片",description:"照片的拍攝時間，比醫院聲稱她失蹤的日期早了三個月。照片背後寫著：『如果他說你已經來過，不要相信。』"},
+    surgery:{image:"./assets/clue-record.jpg",label:"CLASSIFIED RECORD",title:"被刪去的病人紀錄",description:"病歷上有一欄被反覆刮掉。底下仍看得出一行字：『轉送 B2 冷藏室』。最底部還有一個與你相同的姓氏。"},
+    archive:{image:"./assets/clue-record.jpg",label:"ARCHIVE EVIDENCE",title:"第 38 位病人",description:"名冊裡三十七個名字被劃掉，最後一格卻已經填上你的資料。入院時間：十一年前。"},
+    basement:{image:"./assets/clue-warning.jpg",label:"WARNING",title:"牆上的警告",description:"有人用顫抖的字跡寫下：『如果你聽到家人的聲音，先看監視器。這裡會學你最想聽見的聲音。』"},
+    chase:{image:"./assets/doctor-photo.jpg",label:"SUDDEN EVENT · SIGNAL LOST",title:"照片裡多了一個人",description:"你剛拍下走廊照片，畫面便出現一陣監視器雜訊。照片最深處多了一個穿白袍的人影。你放大照片——那張臉，正對著鏡頭。你回頭時，走廊空無一人。"},
+    truth:{image:"./assets/clue-warning.jpg",label:"TRUTH REVEALED",title:"最後一條訊息",description:"牆上的字不是寫給上一個病人的。字跡與你妹妹的筆跡一模一樣，日期卻是明天。"},
+    caughtEnding:{image:"./assets/clue-tools.jpg",label:"YOU WERE FOUND",title:"手術準備開始",description:"燈光亮起。陳醫生沒有生氣，只是翻開病歷，平靜地說：『你終於回到自己的床位了。』"},
+    deadEnding:{image:"./assets/clue-sister.jpg",label:"SIGNAL LOST",title:"最後一張照片",description:"手機螢幕亮了一次。妹妹傳來一張新照片，照片裡的人穿著你的衣服，躺在一張你從未見過的病床上。"}
+  };
+  function showVisualEvent(node){
+    const event=visualEvents[node];
+    if(!event || state.flags["visual_seen_"+node]) return;
+    state.flags["visual_seen_"+node]=true;
+    $("eventImage").src=event.image;
+    $("eventImage").alt=event.title;
+    $("eventLabel").textContent=event.label;
+    $("eventTitle").textContent=event.title;
+    $("eventDescription").textContent=event.description;
+    $("imageEvent").classList.remove("hidden");
+    if(node==="chase") triggerCCTV();
+    save(true);
+  }
+  function closeVisualEvent(){ $("imageEvent").classList.add("hidden"); }
+  $("eventClose").addEventListener("click",closeVisualEvent);
+  $("imageEvent").addEventListener("click",e=>{if(e.target===$("imageEvent"))closeVisualEvent();});
+
   function render(){
     const scene=scenes[state.node];
     $("sceneTag").textContent=scene.tag || "MIDNIGHT QUARANTINE";
@@ -425,7 +472,7 @@
     $("ending").classList.toggle("hidden",!isEnding);
     $("choices").classList.toggle("hidden",isEnding);
     if(isEnding){
-      const endingTitles={escape:"你成功逃離醫院，但故事仍未結束。",loop:"你可能仍然困在醫院之中。",truth:"你帶出了證據，揭開部分真相。",caught:"你被醫生抓住，成為他的下一位病人。",dead:"這次逃生失敗。你可以重新開始，嘗試不同路線。"};
+      const endingTitles={escape:"逃出生天：你活著離開，但妹妹的下落仍成謎。",loop:"循環結局：醫院似乎不允許任何人真正離開。",truth:"真相結局：你帶出證據，揭開醫院共犯的秘密。",caught:"被捕結局：你成為陳醫生下一份病人紀錄。",dead:"死亡結局：這次逃生失敗。重新開始並嘗試不同路線。 "};
       $("endingTitle").textContent=endingTitles[scene.ending]||"故事結束";
       $("endingText").textContent=scene.text.join("\n\n");
       $("restartBtn").textContent="重新開始故事";
@@ -466,6 +513,11 @@
     }
     if(state.health<=0)state.node="deadEnding";
     render();
+    if(state.node!==oldNode) {
+      if(state.node==="chase") { triggerPhotoJump(); soundEffect("heartbeat"); }
+      else if(["corridor","surgery","basement","archive"].includes(state.node) && Math.random()<0.62) triggerCCTV();
+      showVisualEvent(state.node);
+    }
   }
   function clamp(n,min,max){return Math.max(min,Math.min(max,n));}
   function reset(){
@@ -491,7 +543,7 @@
   $("restartBtn").addEventListener("click",()=>{state=initial();enterScene("wake");showToast("新故事開始");});
   $("soundBtn").addEventListener("click",()=>{
     state.sound=!state.sound;
-    if(state.sound) showToast("示範版暫無背景音樂；音效開關已記錄");
+    if(state.sound){soundEffect("static");showToast("恐怖音效已開啟：雜訊、低頻心跳與驚嚇音");}else showToast("恐怖音效已關閉");
     render();
   });
   load();
