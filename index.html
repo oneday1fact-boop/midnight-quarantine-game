@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#090b10">
+  <meta name="description" content="午夜禁區：食人醫生 — 手機恐怖文字冒險遊戲">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <title>午夜禁區：食人醫生</title>
+  <style>
+    :root { color-scheme: dark; --bg:#080a0f; --panel:#11151d; --panel2:#191f2a; --line:#303846; --text:#f1f2f4; --muted:#a8b0bd; --red:#c94d55; --red2:#71272f; --gold:#d8b47b; }
+    * { box-sizing:border-box; }
+    html,body { margin:0; min-height:100%; background:var(--bg); color:var(--text); font-family: ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    body { background: radial-gradient(ellipse at 50% 0%, #20212a 0%, #0a0c12 48%, #050609 100%); }
+    button { font:inherit; }
+    .app { width:min(100%,720px); margin:0 auto; min-height:100dvh; display:flex; flex-direction:column; padding:env(safe-area-inset-top) 14px env(safe-area-inset-bottom); }
+    header { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:16px 2px 12px; }
+    .brand { font-weight:850; letter-spacing:.08em; font-size:14px; }
+    .chapter { color:var(--muted); font-size:11px; letter-spacing:.13em; margin-top:3px; }
+    .iconbtn { background:#151923; border:1px solid var(--line); border-radius:12px; color:var(--text); padding:9px 11px; }
+    .hero { position:relative; min-height:250px; height:34vh; max-height:370px; overflow:hidden; border:1px solid #37333a; border-radius:18px; background:#171820; isolation:isolate; }
+    .hero::before { content:""; position:absolute; inset:0; background:
+      linear-gradient(180deg,rgba(4,5,9,.05) 0%,rgba(4,5,9,.25) 36%,rgba(4,5,9,.94) 100%),
+      radial-gradient(ellipse at 52% 38%,rgba(177,177,187,.18),transparent 35%),
+      linear-gradient(90deg,#11131b 0%,#2a2930 47%,#11121a 100%); z-index:-2; }
+    .hall { position:absolute; inset:0; overflow:hidden; z-index:-1; opacity:.9; }
+    .hall .back { position:absolute; width:42%; height:55%; top:7%; left:29%; background:linear-gradient(180deg,#252731,#090b11); clip-path:polygon(20% 0,80% 0,100% 100%,0 100%); border-top:2px solid #42404a; }
+    .hall .floor { position:absolute; bottom:-8%; left:-10%; width:120%; height:60%; background:linear-gradient(180deg,#1d1c24,#090a0f); clip-path:polygon(43% 0,57% 0,100% 100%,0 100%); }
+    .hall .light { position:absolute; width:4px; height:48%; top:0; left:50%; background:#b8c0c6; opacity:.25; box-shadow:0 0 24px 12px rgba(180,190,200,.13); }
+    .hall .door { position:absolute; top:22%; width:17%; height:42%; border:2px solid #34323b; background:linear-gradient(90deg,#090a10,#22232b,#090a10); }
+    .hall .door.left { left:7%; transform:perspective(100px) rotateY(12deg); }
+    .hall .door.right { right:7%; transform:perspective(100px) rotateY(-12deg); }
+    .doctor { position:absolute; top:12%; left:50%; transform:translateX(-50%); width:21%; height:54%; filter:drop-shadow(0 0 18px rgba(0,0,0,.9)); }
+    .doctor .head { position:absolute; width:40%; height:24%; top:0; left:30%; border-radius:45% 45% 40% 40%; background:linear-gradient(90deg,#111218,#b4b2ae 48%,#292831); }
+    .doctor .mask { position:absolute; top:14%; left:24%; width:52%; height:13%; background:#d0cec7; border-radius:2px 2px 7px 7px; box-shadow:0 0 0 2px #44434a; }
+    .doctor .body { position:absolute; top:21%; left:5%; width:90%; height:75%; background:linear-gradient(90deg,#191a22,#b5b3ad 40%,#777780 62%,#16171e); clip-path:polygon(28% 0,72% 0,100% 100%,0 100%); }
+    .doctor .stain { position:absolute; top:39%; left:43%; width:15%; height:34%; background:linear-gradient(#6d202a,#351018); opacity:.8; transform:rotate(8deg); }
+    .scene-label { position:absolute; bottom:15px; left:16px; right:16px; }
+    .eyebrow { color:#e8a0a3; font-size:10px; letter-spacing:.2em; font-weight:800; text-transform:uppercase; }
+    h1 { margin:5px 0 0; font-size:clamp(22px,6vw,34px); line-height:1.08; letter-spacing:.03em; text-shadow:0 2px 12px #000; }
+    .stats { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin:12px 0; }
+    .stat { border:1px solid var(--line); border-radius:12px; background:rgba(17,21,29,.9); padding:10px 11px; }
+    .stat-label { color:var(--muted); font-size:10px; letter-spacing:.08em; }
+    .stat-value { margin-top:4px; font-size:14px; font-weight:800; }
+    .meter { height:4px; margin-top:7px; border-radius:9px; background:#303540; overflow:hidden; }
+    .meter span { display:block; height:100%; background:var(--red); transition:width .25s; }
+    .story { margin-top:2px; border:1px solid var(--line); border-radius:16px; background:linear-gradient(180deg,#151923,#10131a); padding:16px; }
+    .speaker { color:var(--gold); font-size:11px; font-weight:800; letter-spacing:.15em; margin-bottom:8px; }
+    .story h2 { margin:0 0 10px; font-size:18px; }
+    .story p { color:#e0e3e8; line-height:1.75; font-size:15px; margin:0 0 10px; white-space:pre-line; }
+    .story p:last-child { margin-bottom:0; }
+    .choices { display:grid; gap:9px; margin:12px 0 10px; }
+    .choice { text-align:left; display:flex; align-items:flex-start; gap:12px; width:100%; padding:14px; border:1px solid #3a414e; border-radius:14px; color:var(--text); background:linear-gradient(110deg,#191e28,#12161e); cursor:pointer; transition:transform .12s,border-color .12s,background .12s; min-height:60px; }
+    .choice:active { transform:scale(.99); }
+    .choice:hover,.choice:focus-visible { border-color:#a94a52; outline:none; background:#20202a; }
+    .key { display:grid; place-items:center; width:27px; height:27px; flex:0 0 27px; border-radius:8px; background:#3b2229; color:#f1b6b9; font-weight:900; font-size:12px; }
+    .choice strong { display:block; font-size:14px; margin:1px 0 4px; }
+    .choice small { display:block; color:var(--muted); line-height:1.45; font-size:12px; }
+    .bottom { margin-top:auto; padding:12px 2px 18px; display:flex; gap:8px; align-items:center; justify-content:space-between; color:#7f8794; font-size:10px; }
+    .bottom button { color:#bac1cc; background:transparent; border:0; text-decoration:underline; padding:6px; }
+    .ending { text-align:center; padding:12px 2px 6px; }
+    .ending h2 { color:#ef9ba0; }
+    .primary { background:linear-gradient(120deg,#8d3039,#55232a); border:1px solid #b9535b; color:#fff; padding:14px 18px; border-radius:12px; width:100%; font-weight:800; margin-top:12px; }
+    .inventory { color:#c5cbd5; font-size:12px; line-height:1.6; border:1px dashed #353b46; border-radius:12px; padding:10px 12px; margin-top:10px; }
+    .hidden { display:none!important; }
+    .toast { position:fixed; left:50%; bottom:calc(18px + env(safe-area-inset-bottom)); transform:translateX(-50%); background:#282d38; border:1px solid #505969; border-radius:10px; padding:10px 14px; font-size:12px; box-shadow:0 10px 35px #0009; z-index:10; max-width:90vw; text-align:center; }
+    @media (min-width:600px) { .app{padding-left:22px;padding-right:22px}.hero{height:350px}.story{padding:20px}.choices{grid-template-columns:1fr 1fr}.choice:last-child:nth-child(odd){grid-column:1/-1} }
+    @media (prefers-reduced-motion:reduce) { * {transition:none!important;scroll-behavior:auto!important} }
+  </style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div><div class="brand">MIDNIGHT QUARANTINE</div><div class="chapter">午夜禁區 · 互動恐怖故事</div></div>
+    <button class="iconbtn" id="soundBtn" aria-label="切換音效">♫ 音效關</button>
+  </header>
+
+  <section class="hero" aria-label="陰森的醫院走廊">
+    <div class="hall" aria-hidden="true">
+      <div class="back"></div><div class="floor"></div><div class="light"></div>
+      <div class="door left"></div><div class="door right"></div>
+      <div class="doctor"><div class="head"></div><div class="mask"></div><div class="body"></div><div class="stain"></div></div>
+    </div>
+    <div class="scene-label"><div class="eyebrow" id="sceneTag">CHAPTER 01 · THE WARD</div><h1 id="sceneTitle">最後一個病人</h1></div>
+  </section>
+
+  <section class="stats" aria-label="角色狀態">
+    <div class="stat"><div class="stat-label">生命</div><div class="stat-value" id="healthText">100%</div><div class="meter"><span id="healthBar" style="width:100%"></span></div></div>
+    <div class="stat"><div class="stat-label">醫生警戒</div><div class="stat-value" id="alertText">低</div><div class="meter"><span id="alertBar" style="width:18%"></span></div></div>
+    <div class="stat"><div class="stat-label">手電筒電量</div><div class="stat-value" id="batteryText">78%</div><div class="meter"><span id="batteryBar" style="width:78%;background:#d8b47b"></span></div></div>
+  </section>
+
+  <main>
+    <section class="story">
+      <div class="speaker" id="speaker">未知來電 · 23:47</div>
+      <h2 id="storyTitle">你不應該醒來</h2>
+      <div id="storyText"></div>
+    </section>
+    <div class="inventory" id="inventory">物品：空手。<br>提示：選擇會影響醫生警戒、生命及可走的路線。</div>
+    <section class="choices" id="choices" aria-label="選擇你的行動"></section>
+    <section class="ending hidden" id="ending">
+      <h2 id="endingTitle">故事結束</h2><p id="endingText"></p>
+      <button class="primary" id="restartBtn">重新開始</button>
+    </section>
+  </main>
+  <footer class="bottom"><span>單人恐怖冒險 · 進度自動儲存</span><div><button id="saveBtn">儲存</button><button id="resetBtn">重置進度</button></div></footer>
+</div>
+<div id="toast" class="toast hidden" role="status"></div>
+<script src="./game.js"></script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "name": "午夜禁區：食人醫生",
+  "short_name": "午夜禁區",
+  "description": "手機恐怖文字冒險遊戲",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#080a0f",
+  "theme_color": "#090b10",
+  "lang": "zh-Hant"
+}
